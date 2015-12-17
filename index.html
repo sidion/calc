@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Calc</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script>
+        var app = angular.module('app', []);
+
+          app.controller('MainCtrl', function($scope) {
+            $scope.HoursPerDay = 8;
+            $scope.DaysPerWeek = 5;
+            $scope.WeeksPerYear = 52;
+            $scope.Rate = 75;
+            $scope.UnpaidVacationDays = 20;
+            $scope.TaxRate = 25;
+            $scope.$watchCollection("[HoursPerDay,DaysPerWeek,WeeksPerYear,Rate,UnpaidVacationDays]", function (newVals) {
+                $scope.gross = ((newVals[1] * newVals[2]) - newVals[4] ) * newVals[0] * newVals[3];
+            });
+            $scope.$watchCollection("[gross,TaxRate]", function (newVals) {
+                $scope.net = newVals[0] * ( (100 - newVals[1]) / 100);
+            });
+
+        });
+    </script>
+</head>
+<body ng-app="app" ng-controller="MainCtrl">
+    <div >
+        <p>Hours Per Day : <input type="number" ng-model="HoursPerDay" value="8"></p>
+        <p>Days Per Week : <input type="number" ng-model="DaysPerWeek"  value="5"></p>
+        <p>Weeks Per Year : <input type="number" ng-model="WeeksPerYear"  value="52"></p>
+        <p>Rate : <input type="number" ng-model="Rate" value="75" ></p>
+        <p># of Unpaid Vacation days : <input type="number" ng-model="UnpaidVacationDays"  value="20"></p>
+        <h1>Gross Yearly Income: <span id="gross">{{ gross }}</span></h1>
+        <p>Expedted tax rate (in %) : <input type="number" ng-model="TaxRate" value="25"></p>
+        <h1>Net Yearly Income: <span id="net">{{ net }}</span></h1>
+    </div>
+
+    </body>
+</html>
+
